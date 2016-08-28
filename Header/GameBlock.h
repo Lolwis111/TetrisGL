@@ -20,39 +20,41 @@ class GameBlock
         GameBlock(GLfloat x, GLfloat y, GLfloat r, GLfloat g, GLfloat b);
         GameBlock(const GameBlock &src);
 
+        bool operator<(const GameBlock &src) const { return getDistance() < src.getDistance(); }
+
         virtual ~GameBlock();
 
-        GLfloat getX() { return _x; }
+        GLfloat getX() const { return _x; }
         void setX(GLfloat x);
 
-        GLfloat getY() { return _y; }
+        GLfloat getY() const { return _y; }
         void setY(GLfloat y);
 
-        GLfloat getR() { return _r; }
+        GLfloat getR() const { return _r; }
         void setR(GLfloat r);
             
-        GLfloat getG() { return _g; }
+        GLfloat getG() const { return _g; }
         void setG(GLfloat g);
             
-        GLfloat getB() { return _b; }
+        GLfloat getB() const { return _b; }
         void setB(GLfloat b);
 
         void setColor(GLfloat r, GLfloat g, GLfloat b);
         void setPosition(GLfloat x, GLfloat y);
 
-        bool isFalling() { return _isFalling; }
+        bool isFalling() const { return _isFalling; }
         void setFalling(bool isfalling);
             
-        bool isFree() { return _isFree; }
+        bool isFree() const { return _isFree; }
         void setFree(bool isfree);
             
-        bool isVertical() { return _isVertical; }
+        bool isVertical() const { return _isVertical; }
         void setVertical(bool isvertical);
 
-        GLfloat getSpeed() { return _speed; }
+        GLfloat getSpeed() const { return _speed; }
         void setSpeed(GLfloat speed);    
             
-        GLfloat getFallLimit() { return _fallLimit; }
+        GLfloat getFallLimit() const { return _fallLimit; }
         void setFallLimit(GLfloat limit);
 
         virtual void draw() = 0;
@@ -60,8 +62,9 @@ class GameBlock
         virtual int getBoundaryRight(void) = 0;
         virtual int getBoundaryTop(void) = 0;
         virtual int getBoundaryBottom(void) = 0;
+        virtual bool registerBlock(bool*) = 0;
 
-        GLfloat getDistance();
+        GLfloat getDistance() const;
         void update(); 
 };
 

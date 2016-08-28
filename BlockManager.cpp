@@ -4,6 +4,7 @@
 #include "Header/DoubleBlock.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <algorithm>
 #include <vector>
 
 BlockManager::BlockManager()
@@ -28,9 +29,9 @@ BlockManager::BlockManager()
     _score = 0;
     _lost = false;
     
-    for(int x = 0; x < 7; x++)
+    for(int x = 0; x < X_BLOCKS; x++)
     {
-        for(int y = 0; y < 7; y++)
+        for(int y = 0; y < Y_BLOCKS; y++)
         {
             _blockField[x][y] = false;
         }
@@ -69,9 +70,9 @@ bool BlockManager::moveRight()
     int row = _activeBlock->getBoundaryBottom();
     int right = _activeBlock->getBoundaryRight();
 
-    if(right < 6 && _activeBlock->isFree() == false)
+    if(right < X_BLOCKS-1 && _activeBlock->isFree() == false)
     {
-        if(row < 7 && right < 5)
+        if(row < Y_BLOCKS && right < X_BLOCKS-2)
         {
             if(_blockField[row][right + 1] == true) 
             {
@@ -103,7 +104,7 @@ bool BlockManager::moveLeft()
 
     if(left > 0 && _activeBlock->isFree() == false)
     {
-        if(row < 7 && left > 1)
+        if(row < Y_BLOCKS && left > 1)
         {
             if(_blockField[row][left - 1] == true)
             {
@@ -147,7 +148,7 @@ void BlockManager::processCollision(GameBlock *block)
     int columnL = block->getBoundaryLeft();
     int columnR = block->getBoundaryRight();
 
-    if(rowB > 0 && rowB < 7)
+    if(rowB > 0 && rowB < Y_BLOCKS)
     {
         if(_blockField[rowB - 1][columnL] == true ||
             _blockField[rowB - 1][columnR] == true)
@@ -168,9 +169,6 @@ void BlockManager::update()
     {
         int r = 0, g = 0, b = 0;
         createColor(&r, &g, &b);
-
-        printf("\nL: %f\n", _activeBlock->getFallLimit());
-        printf("X: %f;Y: %f\n", _activeBlock->getX(), _activeBlock->getY());
 
         if (dynamic_cast<SingleBlock*>(_activeBlock) != NULL) 
         {
@@ -209,13 +207,15 @@ void BlockManager::update()
         if(!tmpB->isFalling())
         {
             int rowB = tmpB->getBoundaryBottom();
-            int rowT = tmpB->getBoundaryTop();
+            /*int rowT = tmpB->getBoundaryTop();
             int columnL = tmpB->getBoundaryLeft();
-            int columnR = tmpB->getBoundaryRight();
+            int columnR = tmpB->getBoundaryRight();*/
 
-            if(rowB < 7)
+            if(rowB < Y_BLOCKS)
             {
-                if(dynamic_cast<SingleBlock*>(tmpB) != NULL)
+                tmpB->registerBlock(((bool*)_blockField));
+
+                /*if(dynamic_cast<SingleBlock*>(tmpB) != NULL)
                 {
                     _blockField[rowB][columnL] = true;
                 }
@@ -223,7 +223,7 @@ void BlockManager::update()
                 {
                     if(tmpB->isVertical())
                     {
-                        if(rowB < 6)
+                        if(rowB < Y_BLOCKS-1)
                         {
                             _blockField[rowB][columnL] = true;
                             _blockField[rowT][columnL] = true;
@@ -238,7 +238,7 @@ void BlockManager::update()
                         _blockField[rowB][columnL] = true;
                         _blockField[rowB][columnR] = true;
                     }
-                }
+                }*/
             }
             else 
             {   
@@ -247,14 +247,14 @@ void BlockManager::update()
         }
     }
 
-    for(int row = 0; row < 7; row++)
+    for(int row = 0; row < Y_BLOCKS; row++)
     {
         if(checkRow(row))
         {
             _score += 2;
             _deleteThis.clear();
 
-            for(int c = 0; c < 7; c++) 
+            for(int c = 0; c < X_BLOCKS; c++) 
                 _blockField[row][c] = false;
 
             for(unsigned int i = 0; i < _blocks.size(); i++)
@@ -291,9 +291,9 @@ void BlockManager::update()
             }
             _deleteThis.clear();
 
-            for(int r = row; r < 7; r++)
+            for(int r = row; r < Y_BLOCKS; r++)
             {
-                for(int c = 0; c < 7; c++)
+                for(int c = 0; c < X_BLOCKS; c++)
                 {
                     if(_blockField[r][c])
                     {
@@ -314,12 +314,14 @@ void BlockManager::update()
             }
         }
     }
+
+    std::sort(_blocks.begin(), _blocks.end());
 }
 
 bool BlockManager::checkRow(int row)
 {
     bool result = true;
-    for(int s = 0; s < 7; s++)
+    for(int s = 0; s < X_BLOCKS; s++)
     {
         result = result && _blockField[row][s];
     }
@@ -341,15 +343,16 @@ GLfloat BlockManager::calcYCoordinateFromRow(int row)
         case 4: ret = 0.9; break;
         case 5: ret = 1.1; break;
         case 6: ret = 1.3; break;
+        case 7: ret = 1.5; break;
         default: ret = 0.1; break;
     }
 
     return ret;
 }
 
-void BlockManager::sortBlocks()
+/*void BlockManager::sortBlocks()
 {
-    for(unsigned int i = 0; i < _blocks.size() - 1; i++)
+    for(unsigned int i = 0; i < _blocks.size() - ; i++)
     {
         if(_blocks[i]->getDistance() < _blocks[i + 1]->getDistance())
         {
@@ -358,7 +361,7 @@ void BlockManager::sortBlocks()
             _blocks[i] = t;
         }
     }
-}
+}*/
 
 void BlockManager::createColor(int *r, int *g, int *b)
 {

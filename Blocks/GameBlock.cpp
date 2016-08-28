@@ -123,7 +123,7 @@ void GameBlock::setFallLimit(GLfloat limit)
 ///
 /// Calculating the distance of the block to the origin 
 /// of OpenGLs virtual coordinate system 
-GLfloat GameBlock::getDistance()
+GLfloat GameBlock::getDistance() const
 {
     return sqrt((_x * _x) + (_y * _y));
 }

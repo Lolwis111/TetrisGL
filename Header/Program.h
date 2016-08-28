@@ -1,5 +1,5 @@
-#ifndef MAIN_H_
-#define MAIN_H_
+#ifndef PROGRAM_H_
+#define PROGRAM_H_
 
 #include "BlockManager.h"
 

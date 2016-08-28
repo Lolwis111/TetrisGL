@@ -1,7 +1,7 @@
 #ifndef BLOCKMANAGER_H_
 #define BLOCKMANAGER_H_
-
 #include "GameBlock.h"
+#include "Base.h"
 #include "gl.h"
 #include "glu.h"
 #include <vector>
@@ -12,7 +12,7 @@ class BlockManager
         std::vector<GameBlock*> _blocks;
         std::vector<GameBlock*> _deleteThis;
 
-        bool _blockField[7][7];
+        bool _blockField[X_BLOCKS][Y_BLOCKS];
         bool _lost;
         int _score;
         GameBlock *_activeBlock;

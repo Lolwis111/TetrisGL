@@ -3,6 +3,7 @@
  */
 
 #include "../Header/SingleBlock.h"
+#include "../Header/Base.h"
 #include "gl.h"
 #include "glu.h"
 #include "math.h"
@@ -95,7 +96,21 @@ int SingleBlock::getBoundaryBottom() // remap the y-coordinate to a row
     else if(_y <= 0.901) ret = 4;
     else if(_y <= 1.101) ret = 5;
     else if(_y <= 1.301) ret = 6;
+    else if(_y <= 1.501) ret = 7;
     else ret = 8;
 
     return ret;
+}
+
+bool SingleBlock::registerBlock(bool *field)
+{
+    int index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+
+    if(field[index] == false)
+    {
+        field[index] = true;
+        return true;
+    }
+    
+    return false;
 }

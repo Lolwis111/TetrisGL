@@ -1,6 +1,3 @@
-#ifndef PROGRAM_H_
-#define PROGRAM_H_
-
 #include "SDL.h"
 #include "SDL_opengl.h"
 #include "gl.h"
@@ -135,4 +132,3 @@ bool Program::pollEvents()
 
     return true;
 }
-#endif

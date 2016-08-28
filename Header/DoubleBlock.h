@@ -17,6 +17,7 @@ class DoubleBlock : public GameBlock
         int getBoundaryRight();
         int getBoundaryTop();
         int getBoundaryBottom();
+        bool registerBlock(bool *field);
 };
 
 #endif

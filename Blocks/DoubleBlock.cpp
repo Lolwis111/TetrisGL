@@ -3,6 +3,7 @@
  */
 
 #include "../Header/DoubleBlock.h"
+#include "../Header/Base.h"
 #include "gl.h"
 #include "glu.h"
 #include "math.h"
@@ -149,5 +150,45 @@ int DoubleBlock::getBoundaryBottom()
     else if(_y <= 0.901) return 4;
     else if(_y <= 1.101) return 5;
     else if(_y <= 1.301) return 6;
-    else return 7;
+    else if(_y <= 1.501) return 7;
+    else return 8;
+}
+
+bool DoubleBlock::registerBlock(bool* field)
+{
+    bool ret = false;
+    int index = 0;
+
+    if(this->_isVertical)
+    {
+        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+        if(field[index] == false && field[index + Y_BLOCKS] == false)
+        {
+            field[index] = true;
+            field[index + Y_BLOCKS] = true;
+
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+        }
+    }
+    else
+    {
+        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+        if(field[index] == false && field[index + 1] == false)
+        {
+            field[index] = true;
+            field[index + 1] = true;
+
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+        }
+    }
+
+    return ret;
 }
