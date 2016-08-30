@@ -4,16 +4,16 @@
 
 #include "../Header/SingleBlock.h"
 #include "../Header/Base.h"
-#include "gl.h"
-#include "glu.h"
-#include "math.h"
+#include <gl.h>
+#include <glu.h>
+#include <math.h>
 #include <stdio.h>
+#include <vector>
 
 SingleBlock::SingleBlock(GLfloat x, GLfloat y, GLfloat r, GLfloat g, GLfloat b) :
     GameBlock(x, y, r, g, b)
 {
-    //printf("Left:  %i\n", getBoundaryLeft());
-    //printf("Right: %i\n", getBoundaryRight());
+    
 }
 
 SingleBlock::~SingleBlock()
@@ -71,22 +71,22 @@ void SingleBlock::draw()
     glPopMatrix(); // restore the global matrix
 }
 
-int SingleBlock::getBoundaryLeft()
+int SingleBlock::getBoundaryLeft() const
 {
     return nearbyint((_x + 0.6) * 5); //remap the x-coordinate to a column
 }
 
-int SingleBlock::getBoundaryRight()
+int SingleBlock::getBoundaryRight() const
 {
     return getBoundaryLeft(); //remap the x-coordinate to a column
 }
 
-int SingleBlock::getBoundaryTop() // on a single block the row is the same on both ends
+int SingleBlock::getBoundaryTop() const // on a single block the row is the same on both ends
 {
     return getBoundaryBottom();
 }
 
-int SingleBlock::getBoundaryBottom() // remap the y-coordinate to a row
+int SingleBlock::getBoundaryBottom() const // remap the y-coordinate to a row
 {
     int ret = 0;
     if(_y <= 0.101) ret = 0; 
@@ -104,7 +104,7 @@ int SingleBlock::getBoundaryBottom() // remap the y-coordinate to a row
 
 bool SingleBlock::registerBlock(bool *field)
 {
-    int index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+    int index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft(); // registers the block at the position x;y in the field
 
     if(field[index] == false)
     {
@@ -113,4 +113,14 @@ bool SingleBlock::registerBlock(bool *field)
     }
     
     return false;
+}
+
+SingleBlock* SingleBlock::clone() const
+{
+    return new SingleBlock(*this); //returns a copy of the block
+}
+
+GLfloat SingleBlock::getDistance() const
+{
+    return sqrt((_x * _x) + (_y * _y)); // calculate distance to 0;0
 }

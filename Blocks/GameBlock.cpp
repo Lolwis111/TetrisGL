@@ -46,6 +46,7 @@ GameBlock::~GameBlock()
     // Destroy stuff here
 }
 
+
 // ========================================================
 // Property area, just setting certain values
 
@@ -59,21 +60,21 @@ void GameBlock::setY(GLfloat y)
     _y = y;
 }
 
-void GameBlock::setR(GLfloat r)
+void GameBlock::setR(GLfloat r) // sets r by clamping its range to 0-1
 {
     if(r < 0.0) _r = 0.0;
     else if(r > 1.0) r = 1.0;
     else _r = r;
 }
 
-void GameBlock::setG(GLfloat g)
+void GameBlock::setG(GLfloat g) // sets g by clamping its range to 0-1
 {
     if(g < 0.0) _g = 0.0;
     else if(g > 1.0) _g = 1.0;
     else _g = g;
 }
 
-void GameBlock::setB(GLfloat b)
+void GameBlock::setB(GLfloat b) // set b by clamping its range to 0-1
 {
     if(b < 0.0) _b = 0.0;
     else if(b > 1.0) _b = 1.0;
@@ -89,8 +90,8 @@ void GameBlock::setColor(GLfloat r, GLfloat g, GLfloat b)
 
 void GameBlock::setPosition(GLfloat x, GLfloat y)
 {
-    setX(x);
-    setY(y);
+    _y = y;
+    _x = x;
 }
 
 void GameBlock::setFalling(bool isfalling)
@@ -119,14 +120,6 @@ void GameBlock::setFallLimit(GLfloat limit)
 }
 // ===================================================
 
-
-///
-/// Calculating the distance of the block to the origin 
-/// of OpenGLs virtual coordinate system 
-GLfloat GameBlock::getDistance() const
-{
-    return sqrt((_x * _x) + (_y * _y));
-}
 
 ///
 /// updates the physics of the block

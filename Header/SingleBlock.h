@@ -1,6 +1,7 @@
 #ifndef SINGLEBLOCK_H_
 #define SINGLEBLOCK_H_
 #include "../Header/GameBlock.h"
+#include <vector>
 
 // a 1x1 block derrived from the base-block
 class SingleBlock : public GameBlock
@@ -10,11 +11,16 @@ class SingleBlock : public GameBlock
         SingleBlock(GLfloat x, GLfloat y, GLfloat r, GLfloat g, GLfloat b);
         ~SingleBlock();
 
+
         void draw();
-        int getBoundaryLeft();
-        int getBoundaryRight();
-        int getBoundaryTop();
-        int getBoundaryBottom();
+        int getBoundaryLeft() const;
+        int getBoundaryRight() const;
+        int getBoundaryTop() const;
+        int getBoundaryBottom() const;
         bool registerBlock(bool *field);
+        
+        SingleBlock* clone() const;
+
+        GLfloat getDistance() const;
 };
 #endif

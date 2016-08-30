@@ -2,8 +2,11 @@
  * Class derriving from GameBlock for drawing a 1x2/2x1 block
  */
 
-#include "../Header/DoubleBlock.h"
 #include "../Header/Base.h"
+
+#ifdef DOUBLEBLOCKS
+
+#include "../Header/DoubleBlock.h"
 #include "gl.h"
 #include "glu.h"
 #include "math.h"
@@ -112,12 +115,12 @@ void DoubleBlock::draw()
 
 }
 
-int DoubleBlock::getBoundaryLeft()
+int DoubleBlock::getBoundaryLeft() const
 {
     return (int)(ceil((_x + 0.6) * 5)); // remap the x-coordinate to a column
 }
 
-int DoubleBlock::getBoundaryRight()
+int DoubleBlock::getBoundaryRight() const
 {
     if(this->_isVertical) 
     {
@@ -125,11 +128,11 @@ int DoubleBlock::getBoundaryRight()
     }
     else 
     {
-        return getBoundaryRight() + 1; // in horizontal-mode the rightcolumn is next to the left one
+        return getBoundaryLeft() + 1; // in horizontal-mode the rightcolumn is next to the left one
     }
 }
 
-int DoubleBlock::getBoundaryTop()
+int DoubleBlock::getBoundaryTop() const
 {
     if(this->_isVertical) 
     {
@@ -141,7 +144,7 @@ int DoubleBlock::getBoundaryTop()
     }
 }
 
-int DoubleBlock::getBoundaryBottom()
+int DoubleBlock::getBoundaryBottom() const
 {
     if(_y <= 0.101) return 0;       // remap the y-coordinate to a row
     else if(_y <= 0.301) return 1;
@@ -156,12 +159,15 @@ int DoubleBlock::getBoundaryBottom()
 
 bool DoubleBlock::registerBlock(bool* field)
 {
+    //TODO not registering correctly
+
     bool ret = false;
     int index = 0;
 
     if(this->_isVertical)
     {
-        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft(); // register a block at x;y and x;y+1
+
         if(field[index] == false && field[index + Y_BLOCKS] == false)
         {
             field[index] = true;
@@ -176,7 +182,8 @@ bool DoubleBlock::registerBlock(bool* field)
     }
     else
     {
-        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft();
+        index = (getBoundaryBottom() * Y_BLOCKS) + getBoundaryLeft(); // register a block at x;y and x+1;y
+
         if(field[index] == false && field[index + 1] == false)
         {
             field[index] = true;
@@ -192,3 +199,17 @@ bool DoubleBlock::registerBlock(bool* field)
 
     return ret;
 }
+
+DoubleBlock* DoubleBlock::clone() const
+{
+    return new DoubleBlock(*this); // returns a copy of the block
+}
+
+GLfloat DoubleBlock::getDistance() const // calculates the distance from the center of the block to 0;0 based on the orientation
+{
+    if(this->_isVertical) return sqrt((_x * _x) + ((_y + 0.1) * (_y + 0.1)));
+   
+    return sqrt(((_x + 0.1) * (_x + 0.1)) + (_y * _y));
+}
+
+#endif

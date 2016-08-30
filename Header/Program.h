@@ -6,12 +6,10 @@
 class Program
 {
     public:
-        int run(int argc, char **argv);
+        int run(int argc, char **argv); // main-function of the game
     private:
-        bool pollEvents(void);
-        bool isPaused;
-        bool blink;
-        BlockManager *manager;
+        bool pollEvents(void); // processes the SDL events
+        BlockManager manager;  // instance of the BlockManager
 };
 
 #endif

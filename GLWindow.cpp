@@ -25,9 +25,14 @@ ApplicationWindow::~ApplicationWindow()
 /// Creates an new OpenGL-window
 bool ApplicationWindow::create()
 {
+    int error = 0;
     if(_state & OPEND_WINDOW) destroy(); // check wether a window was allready created
 
-    if(!SDL_WasInit(SDL_INIT_VIDEO)) SDL_InitSubSystem(SDL_INIT_VIDEO); // if init was never run do it now
+    if(!SDL_WasInit(SDL_INIT_VIDEO)) 
+        error = SDL_InitSubSystem(SDL_INIT_VIDEO); // if init was never run do it now
+
+    if(error != 0)
+        return false;
 
     SDL_WM_SetCaption(_caption.c_str(), NULL);   // set the window- and taskbarcaption
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // use a doublebuffer
@@ -51,7 +56,9 @@ bool ApplicationWindow::destroy()
       
     SDL_FreeSurface(_surface); // release the resources
     _state &= ~OPEND_WINDOW; // set state to not-open
-        
+
+    delete(_surface);  
+      
     return true; // all ok
 }
 
